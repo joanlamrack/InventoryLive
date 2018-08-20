@@ -6,10 +6,10 @@ class userAuthMiddleware {
 	constructor() {}
 
 	static checkToken(req, res, next) {
-		//console.log(req.headers.token);
-		if (!req.headers.token) {
+		console.log(req.headers)
+		if (!req.headers.authorization) {
 			res.status(401).json({
-				message: "Unauthorized Access, please signin"
+				message: "Unauthorized Access, please signin1"
 			});
 		} else {
 			next();
@@ -17,11 +17,12 @@ class userAuthMiddleware {
 	}
 
 	static checkifTokenValid(req, res, next) {
-		let token = req.body.Authorization;
+		let token = req.headers.authorization;
 		token = token.replace(/Basic /gi,"");
 		let id;
 		try {
 			id = AuthHelper.decodeToken(token).id;
+			console.log("this",id);
 			User.findById(ObjectId(id))
 				.then(userFound => {
 					if (userFound) {
